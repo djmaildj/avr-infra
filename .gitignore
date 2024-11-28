@@ -1,2 +1,7 @@
 google.json
 docker-compose-dev.yml
+asterisk
+dashboard
+traefik
+website
+.env

@@ -1,55 +1,44 @@
 services:
   avr-core:
     image: agentvoiceresponse/avr-core
+    platform: linux/x86_64
     container_name: avr-core
     restart: always
-    ports:
-      - 5001:5001
     environment:
       - PORT=5001 
-      - ASR_URL=http://host.docker.internal:6001/speech-to-text-stream
-      - LLM_URL=http://host.docker.internal:6004/prompt-stream
-      - TTS_URL=http://host.docker.internal:6003/text-to-speech-stream
-      - WALLET_ID=
+      - ASR_URL=$ASR_URL
+      - LLM_URL=$LLM_URL
+      - TTS_URL=$TTS_URL
+      - WALLET_ID=$WALLET_ID
+      - INTERRUPT_LISTENING=$INTERRUPT_LISTENING
+      - SYSTEM_MESSAGE=$SYSTEM_MESSAGE
+    ports:
+      - 5001:5001
     networks:
       - avr
 
   avr-asr-google-cloud-speech:
     image: agentvoiceresponse/avr-asr-google-cloud-speech
+    platform: linux/x86_64
     container_name: avr-asr-google-cloud-speech
     restart: always
-    ports:
-      - 6001:6001
     environment:
       - PORT=6001
       - GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/google.json
-      - SPEECH_RECOGNITION_LANGUAGE=en-US
+      - SPEECH_RECOGNITION_LANGUAGE=${SPEECH_RECOGNITION_LANGUAGE:-en-US}
       - SPEECH_RECOGNITION_MODEL=telephony
+    ports:
+      - 6001:6001
     volumes:
       - ./google.json:/usr/src/app/google.json
     networks:
       - avr
 
-  avr-llm-openai:
-    image: agentvoiceresponse/avr-llm-openai
-    container_name: avr-llm-openai
-    restart: always
-    ports:
-      - 6002:6002
-    environment:
-      - PORT=6002
-      - OPENAI_API_KEY=sk-proj-
-      - OPENAI_MODEL=gpt-3.5-turbo
-      - SYSTEM_PROMPT="You are a helpful assistant."
-    networks:
-      - avr
-  
   avr-tts-google-cloud-tts:
     image: agentvoiceresponse/avr-tts-google-cloud-tts
+    platform: linux/x86_64
     container_name: avr-tts-google-cloud-tts
     restart: always
-    ports:
-      - 6003:6003
     environment:
       - PORT=6003
       - GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/google.json
@@ -59,35 +48,62 @@ services:
       - TEXT_TO_SPEECH_SPEAKING_RATE=1
     volumes:
       - ./google.json:/usr/src/app/google.json
+    ports:
+      - 6003:6003
     networks:
       - avr
 
-  avr-llm-openai-assistant:
-    image: agentvoiceresponse/avr-llm-openai-assistant
-    container_name: avr-llm-openai-assistant
+  avr-tts-elevenlabs:
+    image: agentvoiceresponse/avr-tts-elevenlabs
+    platform: linux/x86_64
+    container_name: avr-tts-elevenlabs
     restart: always
-    ports:
-      - 6004:6004
     environment:
-      - PORT=6004
-      - OPENAI_API_KEY=sk-proj-
-      - OPENAI_ASSISTANT_ID=asst_
-      - OPENAI_WAITING_MESSAGE="Please wait while I retrieve your information."
-      - OPENAI_WAITING_TIMEOUT=1000
+      - PORT=6007
+      - ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY
+      - ELEVENLABS_VOICE_ID=$ELEVENLABS_VOICE_ID
+    ports:
+      - 6007:6007
+    networks:
+      - avr
+
+  avr-llm-typebot:
+    image: agentvoiceresponse/avr-llm-typebot
+    platform: linux/x86_64
+    container_name: avr-llm-typebot
+    restart: always
+    environment:
+      - PORT=6005
+      - TYPEBOT_PUBLIC_ID=$TYPEBOT_PUBLIC_ID
+    ports:
+      - 6005:6005
+    networks:
+      - avr
+
+  avr-llm-openai:
+    image: agentvoiceresponse/avr-llm-openai
+    platform: linux/x86_64
+    container_name: avr-llm-openai
+    restart: always
+    environment:
+      - PORT=6002
+    ports:
+      - 6002:6002
     networks:
       - avr
   
-  avr-llm-typebot:
-    image: agentvoiceresponse/avr-llm-typebot
-    container_name: avr-llm-typebot
+  avr-llm-openai-assistant:
+    image: agentvoiceresponse/avr-llm-openai-assistant
+    platform: linux/x86_64
+    container_name: avr-llm-openai-assistant
     restart: always
-    ports:
-      - 6005:6005
     environment:
-      - PORT=6005
-      - TYPEBOT_PUBLIC_ID=
+      - PORT=6004
+    ports:
+      - 6004:6004
     networks:
       - avr
 
 networks:
   avr:
+    name: avr
