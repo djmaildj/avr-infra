@@ -88,6 +88,9 @@ services:
     restart: always
     environment:
       - PORT=6002
+      - OPENAI_API_KEY=$OPENAI_API_KEY
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-3.5-turbo}
+      - SYSTEM_PROMPT=$SYSTEM_PROMPT
     ports:
       - 6002:6002
     networks:
@@ -100,6 +103,10 @@ services:
     restart: always
     environment:
       - PORT=6004
+      - OPENAI_API_KEY=$OPENAI_API_KEY
+      - OPENAI_ASSISTANT_ID=$OPENAI_ASSISTANT_ID
+      - OPENAI_WAITING_MESSAGE=$OPENAI_WAITING_MESSAGE
+      - OPENAI_WAITING_TIMEOUT=${OPENAI_WAITING_TIMEOUT:-1000}
     ports:
       - 6004:6004
     networks:
