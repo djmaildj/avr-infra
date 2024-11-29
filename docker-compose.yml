@@ -48,6 +48,7 @@ services:
       - TEXT_TO_SPEECH_SPEAKING_RATE=1
     volumes:
       - ./google.json:/usr/src/app/google.json
+      - ./audio-cache:/usr/src/app/audio-cache
     ports:
       - 6003:6003
     networks:
