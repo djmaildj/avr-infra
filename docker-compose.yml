@@ -42,13 +42,12 @@ services:
     environment:
       - PORT=6003
       - GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/google.json
-      - TEXT_TO_SPEECH_LANGUAGE=en-AU
-      - TEXT_TO_SPEECH_GENDER=FEMALE
-      - TEXT_TO_SPEECH_NAME=en-AU-Neural2-C
-      - TEXT_TO_SPEECH_SPEAKING_RATE=1
+      - TEXT_TO_SPEECH_LANGUAGE=${TEXT_TO_SPEECH_LANGUAGE:-en-US}
+      - TEXT_TO_SPEECH_GENDER=${TEXT_TO_SPEECH_GENDER:-FEMALE}
+      - TEXT_TO_SPEECH_NAME=${TEXT_TO_SPEECH_NAME:-en-AU-Neural2-C}
+      - TEXT_TO_SPEECH_SPEAKING_RATE=${TEXT_TO_SPEECH_SPEAKING_RATE:-1}
     volumes:
       - ./google.json:/usr/src/app/google.json
-      - ./audio-cache:/usr/src/app/audio-cache
     ports:
       - 6003:6003
     networks:
