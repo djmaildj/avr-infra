@@ -1,8 +1,14 @@
-google.json
-docker-compose-dev.yml
-asterisk
 dashboard
+db
+functions
+mysql
+ollama
 traefik
-website
 .env
-audio-cache
+.env copy
+docker-compose-astricon.yml
+docker-compose-book.yml
+docker-compose-deepgram.yml
+docker-compose-ollama.yml
+docker-compose-openrouter.yml
+google.json

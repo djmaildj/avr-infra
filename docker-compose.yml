@@ -1,116 +1,83 @@
 services:
-  avr-core:
-    image: agentvoiceresponse/avr-core
+  avr-app:
+    image: agentvoiceresponse/avr-app
     platform: linux/x86_64
-    container_name: avr-core
+    container_name: avr-app
     restart: always
     environment:
-      - PORT=5001 
-      - ASR_URL=$ASR_URL
-      - LLM_URL=$LLM_URL
-      - TTS_URL=$TTS_URL
-      - WALLET_ID=$WALLET_ID
-      - INTERRUPT_LISTENING=$INTERRUPT_LISTENING
-      - SYSTEM_MESSAGE=$SYSTEM_MESSAGE
-    ports:
-      - 5001:5001
-    networks:
-      - avr
-
-  avr-asr-google-cloud-speech:
-    image: agentvoiceresponse/avr-asr-google-cloud-speech
-    platform: linux/x86_64
-    container_name: avr-asr-google-cloud-speech
-    restart: always
-    environment:
-      - PORT=6001
-      - GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/google.json
-      - SPEECH_RECOGNITION_LANGUAGE=${SPEECH_RECOGNITION_LANGUAGE:-en-US}
-      - SPEECH_RECOGNITION_MODEL=telephony
-    ports:
-      - 6001:6001
+      - NODE_ENV=production
+      - APP_VERSION=${APP_VERSION}
+      - PORT=3000
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - DATABASE_HOST=avr-app-db
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=${DATABASE_NAME:-avr}
+      - DATABASE_USERNAME=${DATABASE_USERNAME:-avr}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - AMI_PORT=${AMI_PORT:-9000}
     volumes:
-      - ./google.json:/usr/src/app/google.json
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./asterisk:/usr/src/app/asterisk 
+      - ./keys:/usr/src/app/keys
+    ports:
+      - 3000:3000
+    depends_on:
+      - avr-app-db
     networks:
       - avr
-
-  avr-tts-google-cloud-tts:
-    image: agentvoiceresponse/avr-tts-google-cloud-tts
+  avr-app-db:
+    image: mysql:8.0.15
     platform: linux/x86_64
-    container_name: avr-tts-google-cloud-tts
+    container_name: avr-app-db
+    command: mysqld --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      - PORT=6003
-      - GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/google.json
-      - TEXT_TO_SPEECH_LANGUAGE=${TEXT_TO_SPEECH_LANGUAGE:-en-US}
-      - TEXT_TO_SPEECH_GENDER=${TEXT_TO_SPEECH_GENDER:-FEMALE}
-      - TEXT_TO_SPEECH_NAME=${TEXT_TO_SPEECH_NAME:-en-AU-Neural2-C}
-      - TEXT_TO_SPEECH_SPEAKING_RATE=${TEXT_TO_SPEECH_SPEAKING_RATE:-1}
+      - MYSQL_DATABASE=${DATABASE_NAME:-avr}
+      - MYSQL_USER=${DATABASE_USERNAME:-avr}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+    ports:
+      - 3309:3306
     volumes:
-      - ./google.json:/usr/src/app/google.json
-    ports:
-      - 6003:6003
+      - ./db:/var/lib/mysql
     networks:
       - avr
 
-  avr-tts-elevenlabs:
-    image: agentvoiceresponse/avr-tts-elevenlabs
+  avr-ami:
+    image: agentvoiceresponse/avr-ami
     platform: linux/x86_64
-    container_name: avr-tts-elevenlabs
+    container_name: avr-ami
     restart: always
     environment:
-      - PORT=6007
-      - ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY
-      - ELEVENLABS_VOICE_ID=$ELEVENLABS_VOICE_ID
-    ports:
-      - 6007:6007
+      - PORT=${AMI_PORT:-9000}
+      - AMI_HOST=${AMI_HOST:-avr-asterisk}
+      - AMI_PORT=${AMI_PORT:-5038}
+      - AMI_USERNAME=${AMI_USERNAME:-avr}
+      - AMI_PASSWORD=${AMI_PASSWORD:-avr}
     networks:
       - avr
 
-  avr-llm-typebot:
-    image: agentvoiceresponse/avr-llm-typebot
+  avr-asterisk:
+    image: agentvoiceresponse/avr-asterisk
     platform: linux/x86_64
-    container_name: avr-llm-typebot
+    container_name: avr-asterisk
     restart: always
-    environment:
-      - PORT=6005
-      - TYPEBOT_PUBLIC_ID=$TYPEBOT_PUBLIC_ID
     ports:
-      - 6005:6005
-    networks:
-      - avr
-
-  avr-llm-openai:
-    image: agentvoiceresponse/avr-llm-openai
-    platform: linux/x86_64
-    container_name: avr-llm-openai
-    restart: always
-    environment:
-      - PORT=6002
-      - OPENAI_API_KEY=$OPENAI_API_KEY
-      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-3.5-turbo}
-      - SYSTEM_PROMPT=$SYSTEM_PROMPT
-    ports:
-      - 6002:6002
-    networks:
-      - avr
-  
-  avr-llm-openai-assistant:
-    image: agentvoiceresponse/avr-llm-openai-assistant
-    platform: linux/x86_64
-    container_name: avr-llm-openai-assistant
-    restart: always
-    environment:
-      - PORT=6004
-      - OPENAI_API_KEY=$OPENAI_API_KEY
-      - OPENAI_ASSISTANT_ID=$OPENAI_ASSISTANT_ID
-      - OPENAI_WAITING_MESSAGE=$OPENAI_WAITING_MESSAGE
-      - OPENAI_WAITING_TIMEOUT=${OPENAI_WAITING_TIMEOUT:-1000}
-    ports:
-      - 6004:6004
+      - 5060:5060
+      - 10000-10050:10000-10050/udp
+    volumes:
+      - ./asterisk/conf/manager.conf:/etc/asterisk/my_manager.conf
+      - ./asterisk/conf/pjsip.conf:/etc/asterisk/my_pjsip.conf
+      - ./asterisk/conf/extensions.conf:/etc/asterisk/my_extensions.conf
+      - ./asterisk/conf/queues.conf:/etc/asterisk/my_queues.conf
     networks:
       - avr
 
 networks:
   avr:
     name: avr
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
