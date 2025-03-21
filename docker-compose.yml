@@ -14,7 +14,10 @@ services:
       - DATABASE_NAME=${DATABASE_NAME:-avr}
       - DATABASE_USERNAME=${DATABASE_USERNAME:-avr}
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - AMI_PORT=${AMI_PORT:-9000}
+      - AMI_URL=${AMI_URL:-http://avr-ami:9000}
+      - ARI_URL=${ARI_URL:-http://avr-asterisk:8088/ari}
+      - ARI_USERNAME=${ARI_USERNAME:-avr}
+      - ARI_PASSWORD=${ARI_PASSWORD:-avr}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./asterisk:/usr/src/app/asterisk 
