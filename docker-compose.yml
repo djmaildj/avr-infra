@@ -1,4 +1,5 @@
 services:
+
   avr-app:
     image: agentvoiceresponse/avr-app
     platform: linux/x86_64
@@ -22,9 +23,11 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - avr-app-db
+      avr-app-db:
+        condition: service_healthy
     networks:
       - avr
+
   avr-app-db:
     image: mysql:8.0.15
     platform: linux/x86_64
@@ -40,6 +43,10 @@ services:
       - 3309:3306
     volumes:
       - ./db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
     networks:
       - avr
 
@@ -65,11 +72,13 @@ services:
     ports:
       - 5060:5060
       - 10000-10050:10000-10050/udp
+      - 8088:8088
     volumes:
       - ./asterisk/conf/manager.conf:/etc/asterisk/my_manager.conf
       - ./asterisk/conf/pjsip.conf:/etc/asterisk/my_pjsip.conf
       - ./asterisk/conf/extensions.conf:/etc/asterisk/my_extensions.conf
       - ./asterisk/conf/queues.conf:/etc/asterisk/my_queues.conf
+      - ./asterisk/conf/ari.conf:/etc/asterisk/my_ari.conf
     networks:
       - avr
 
