@@ -1,14 +1,9 @@
 dashboard
 db
-functions
 mysql
 ollama
 traefik
 .env
-.env copy
-docker-compose-astricon.yml
-docker-compose-book.yml
-docker-compose-deepgram.yml
-docker-compose-ollama.yml
-docker-compose-openrouter.yml
+.keys
+docker-compose-*.yml
 google.json

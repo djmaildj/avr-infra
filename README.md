@@ -75,7 +75,17 @@ To start all services, simply run:
 docker-compose up -d
 ```
 
-This command will start all the necessary services for AVR Core, including ASR, LLM, and TTS.
+This command will start Asterisk, MySQL, and the web application. To access the web application, go to `localhost:3000` (or the port configured in the `.env` file) and log in with the `ADMIN_EMAIL` and `ADMIN_PASSWORD` configured in the `.env` file.
+
+### Enjoy the Agent Voice Response APP
+
+Once you've set up the infrastructure, you can access the application through your browser. Begin by logging in with your credentials:
+
+![AVR Login Screen](images/avr-login.png)
+
+After logging in, you'll be directed to the dashboard where you can configure and manage your AI Agents, view call statistics, and monitor the system:
+
+![AVR Dashboard](images/avr-dashboard.png)
 
 ## Available Integrations
 
