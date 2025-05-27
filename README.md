@@ -201,6 +201,23 @@ Once you have configured and started your services, you can test the setup using
 
 If everything works as expected, your AVR setup is ready for use. Happy testing!
 
+### Using Your Existing Asterisk Installation
+
+Each docker-compose file includes the `avr-asterisk` service, but if you already have Asterisk installed on your system, you don't need to run the containerized Asterisk. You can simply comment out the `avr-asterisk` service in your chosen docker-compose file.
+
+The only thing you need to do is configure your extensions in your existing Asterisk installation. Here's an example configuration for your `extensions.conf`:
+
+```
+[demo]
+exten => 5001,1,Answer()
+exten => 5001,n,Ringing()
+exten => 5001,n,Set(UUID=${SHELL(uuidgen | tr -d '\n')})
+exten => 5001,n,AudioSocket(${UUID},AVR_HOST_IP_OR_DOMAIN:AVR_HOST_PORT)
+exten => 5001,n,Hangup()
+```
+
+Make sure to replace `AVR_HOST_IP_OR_DOMAIN:AVR_HOST_PORT` with the actual IP address or domain and port where your `avr-core` service is running (typically `127.0.0.1:5001` if running locally).
+
 ### How to Add Your Own Provider Combination
 
 1. Use one of the example docker-compose files.
