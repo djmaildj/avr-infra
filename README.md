@@ -56,6 +56,7 @@ The most critical configuration is setting up the correct URLs for your services
 
 If you are using STS (Speech-to-Speech) instead of separate ASR and TTS services, you only need to configure:
 - `STS_URL`: The URL where your STS service is running (e.g., `http://avr-sts-[provider_name]:[port]`)
+You can find an example configuration using OpenAI Realtime in the `docker-compose-openai-realtime.yml` file.
 
 If your provider doesn't support ASR but only STT (Speech-to-Text), you'll need to use the `avr-asr-to-tts` container which handles VAD (Voice Activity Detection) and audio packet composition for your STT service. In this case:
 - Set `ASR_URL` to `http://avr-asr-to-tts:[port]`
@@ -68,6 +69,17 @@ These URLs are used by AVR Core to forward:
 - Responses to your TTS service
 
 Make sure these URLs are correctly configured whether you're using local services or external providers.
+
+### Table of Compose Files 
+
+| File | ASR | LLM | TTS | Example | Use Case/Notes |
+|------|-----|-----|-----|---------|----------------|
+| [docker-compose-anthropic.yml](./docker-compose-anthropic.yml) | Deepgram | Anthropic | Deepgram | [1](#example-1-deepgram-asrtts--anthropic-llm) | Headless, Anthropic LLM |
+| [docker-compose-openai.yml](./docker-compose-openai.yml) | Deepgram | OpenAI | Deepgram | [2](#example-2-deepgram-asrtts--openai-llm) | Headless, OpenAI LLM |
+| [docker-compose-elevenlabs.yml](./docker-compose-elevenlabs.yml) | ElevenLabs | OpenAI | ElevenLabs | [3](#example-3-elevenlabs-stttts--avr-asr-to-stt--anthropic-llm) | Headless, ElevenLabs |
+| [docker-compose-google.yml](./docker-compose-google.yml) | Google | OpenRouter | Google | [4](#example-4-google-asrtts--openrouter-llm) | Headless, Google |
+| [docker-compose-vosk.yml](./docker-compose-vosk.yml) | Vosk | Anthropic | Deepgram | [5](#example-5-vosk-asr-open-source--anthropic-llm--deepgram-tts) | Headless, Vosk Open Source |
+| [docker-compose-openai-realtime.yml](./docker-compose-openai-realtime.yml) | OpenAI | OpenAI | OpenAI | [6](#example-6-openai-realtime-asrllmtts) | Headless, OpenAI Realtime |
 
 #### Example 1: Deepgram (ASR+TTS) + Anthropic (LLM)
 
@@ -141,14 +153,30 @@ OPENROUTER_API_KEY=sk-or-v1-
 OPENROUTER_MODEL=deepseek/deepseek-chat-v3-0324:free
 ```
 
-### Table of Compose Files
+#### Example 5: Vosk (ASR Open Source) + Anthropic (LLM) + Deepgram (TTS)
 
-| File                               | ASR         | LLM               | TTS         | Example | Use Case/Notes                |
-|------------------------------------|-------------|-------------------|-------------|---------|-------------------------------|
-| docker-compose-anthropic.yml       | Deepgram    | Anthropic         | Deepgram    |    1    | Headless, Anthropic LLM       |
-| docker-compose-openai.yml          | Deepgram    | OpenAI            | Deepgram    |    2    | Headless, OpenAI LLM          |
-| docker-compose-elevenlabs.yml      | ElevenLabs  | OpenAI            | ElevenLabs  |    3    | Headless, ElevenLabs          |
-| docker-compose-google.yml          | Google      | OpenAI            | Google      |    4    | Headless, Google              |
+```bash
+docker-compose -f docker-compose-vosk.yml up -d
+```
+
+**Required .env parameters:**
+```
+DEEPGRAM_API_KEY=your_deepgram_key
+```
+
+#### Example 6: OpenAI Realtime (ASR+LLM+TTS)
+
+```bash
+docker-compose -f docker-compose-openai-realtime.yml up -d
+```
+
+**Required .env parameters:**
+```
+PORT=6030
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4o-realtime-preview
+OPENAI_INSTRUCTIONS="You are a helpful assistant."
+```
 
 ### Testing Your Setup
 

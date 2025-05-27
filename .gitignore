@@ -11,5 +11,8 @@ docker-compose-*.yml
 !docker-compose-openai.yml
 !docker-compose-elevenlabs.yml
 !docker-compose-google.yml
+!docker-compose-vosk.yml
+!docker-compose-openai-realtime.yml
 google.json
 tools
+model

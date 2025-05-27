@@ -74,6 +74,7 @@ services:
       - ./asterisk/conf/pjsip.conf:/etc/asterisk/my_pjsip.conf
       - ./asterisk/conf/extensions.conf:/etc/asterisk/my_extensions.conf
       - ./asterisk/conf/queues.conf:/etc/asterisk/my_queues.conf
+      - ./asterisk/conf/ari.conf:/etc/asterisk/my_ari.conf
     networks:
       - avr
 
