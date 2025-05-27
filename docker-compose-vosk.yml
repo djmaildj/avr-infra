@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       - PORT=5001 
-      - ASR_URL=http://avr-asr-deepgram:6010/speech-to-text-stream
+      - ASR_URL=http://avr-asr-vosk:6010/speech-to-text-stream
       - LLM_URL=http://avr-llm-anthropic:6014/prompt-stream
       - TTS_URL=http://avr-tts-deepgram:6011/text-to-speech-stream
       - INTERRUPT_LISTENING=true
@@ -16,16 +16,16 @@ services:
     networks:
       - avr
 
-  avr-asr-deepgram:
-    image: agentvoiceresponse/avr-asr-deepgram
+  avr-asr-vosk:
+    image: agentvoiceresponse/avr-asr-vosk
     platform: linux/x86_64
-    container_name: avr-asr-deepgram
+    container_name: avr-asr-vosk
     restart: always
     environment:
       - PORT=6010
-      - DEEPGRAM_API_KEY=$DEEPGRAM_API_KEY
-      - SPEECH_RECOGNITION_LANGUAGE=en-US
-      - SPEECH_RECOGNITION_MODEL=nova-2-phonecall
+      - MODEL_PATH=model
+    volumes:
+      - ./model:/usr/src/app/model
     networks:
       - avr
 
