@@ -6,4 +6,10 @@ traefik
 .env
 .keys
 docker-compose-*.yml
+!docker-compose-app.yml
+!docker-compose-anthropic.yml
+!docker-compose-openai.yml
+!docker-compose-elevenlabs.yml
+!docker-compose-google.yml
 google.json
+tools
