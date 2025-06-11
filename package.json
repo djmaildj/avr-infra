@@ -1,6 +1,6 @@
 {
   "name": "avr-infra",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": "Giuseppe Careri <info@gcareri.com> (https://gcareri.com)",
   "contributors": [],
   "keywords": ["avr", "agentvoiceresponse", "voicebot", "infra"],
