@@ -19,7 +19,7 @@ This architecture allows you to customize and swap ASR, LLM, and TTS providers a
 
 > **New in recent versions:** AVR now supports integration with OpenAI Realtime Speech-to-Speech. You can find an example configuration in the `docker-compose-openai-realtime.yml` file.
 
-> If the provider you want to integrate does not support ASR but only Speech-to-Text, we've implemented support for this as well. Simply add the `avr-asr-to-tts` container between `avr-core` and your TTS container. You can find an example using ElevenLabs STT in the `docker-compose-elevenlabs.yml` file.
+> If the provider you want to integrate does not support ASR but only Speech-to-Text, we've implemented support for this as well. Simply add the `avr-asr-to-stt` container between `avr-core` and your STT container. You can find an example using ElevenLabs STT in the `docker-compose-elevenlabs.yml` file.
 
 ## Key Features
 
