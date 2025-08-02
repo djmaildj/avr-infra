@@ -19,7 +19,7 @@ This architecture allows you to customize and swap ASR, LLM, and TTS providers a
 
 > **New in recent versions:** AVR now supports integration with OpenAI Realtime Speech-to-Speech. You can find an example configuration in the `docker-compose-openai-realtime.yml` file.
 
-> If the provider you want to integrate does not support ASR but only Speech-to-Text, we've implemented support for this as well. Simply add the `avr-asr-to-tts` container between `avr-core` and your TTS container. You can find an example using ElevenLabs STT in the `docker-compose-elevenlabs.yml` file.
+> If the provider you want to integrate does not support ASR but only Speech-to-Text, we've implemented support for this as well. Simply add the `avr-asr-to-stt` container between `avr-core` and your STT container. You can find an example using ElevenLabs STT in the `docker-compose-elevenlabs.yml` file.
 
 ## Key Features
 
@@ -54,13 +54,13 @@ The most critical configuration is setting up the correct URLs for your services
 - `LLM_URL`: The URL where your LLM service is running (e.g., `http://avr-llm-[provider_name]:[port]`)
 - `TTS_URL`: The URL where your TTS service is running (e.g., `http://avr-tts-[provider_name]:[port]`)
 
-If you are using STS (Speech-to-Speech) instead of separate ASR and TTS services, you only need to configure:
+If you are using STS (Speech-to-Speech) instead of separate ASR, LLM and TTS services, you only need to configure:
 - `STS_URL`: The URL where your STS service is running (e.g., `http://avr-sts-[provider_name]:[port]`)
 You can find an example configuration using OpenAI Realtime in the `docker-compose-openai-realtime.yml` file.
 
-If your provider doesn't support ASR but only STT (Speech-to-Text), you'll need to use the `avr-asr-to-tts` container which handles VAD (Voice Activity Detection) and audio packet composition for your STT service. In this case:
-- Set `ASR_URL` to `http://avr-asr-to-tts:[port]`
-- Configure your `STT_URL` in the environment variables of the `avr-asr-to-tts` container
+If your provider doesn't support ASR but only STT (Speech-to-Text), you'll need to use the `avr-asr-to-stt` container which handles VAD (Voice Activity Detection) and audio packet composition for your STT service. In this case:
+- Set `ASR_URL` to `http://avr-asr-to-stt:[port]`
+- Configure your `STT_URL` in the environment variables of the `avr-asr-to-stt` container
 You can find an example configuration using ElevenLabs in the `docker-compose-elevenlabs.yml` file.
 
 These URLs are used by AVR Core to forward:
