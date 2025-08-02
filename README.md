@@ -79,7 +79,8 @@ Make sure these URLs are correctly configured whether you're using local service
 | [docker-compose-elevenlabs.yml](./docker-compose-elevenlabs.yml) | ElevenLabs | OpenAI | ElevenLabs | [3](#example-3-elevenlabs-stttts--avr-asr-to-stt--anthropic-llm) | Headless, ElevenLabs |
 | [docker-compose-google.yml](./docker-compose-google.yml) | Google | OpenRouter | Google | [4](#example-4-google-asrtts--openrouter-llm) | Headless, Google |
 | [docker-compose-vosk.yml](./docker-compose-vosk.yml) | Vosk | Anthropic | Deepgram | [5](#example-5-vosk-asr-open-source--anthropic-llm--deepgram-tts) | Headless, Vosk Open Source |
-| [docker-compose-openai-realtime.yml](./docker-compose-openai-realtime.yml) | OpenAI | OpenAI | OpenAI | [6](#example-6-openai-realtime-asrllmtts) | Headless, OpenAI Realtime |
+| [docker-compose-openai-realtime.yml](./docker-compose-openai-realtime.yml) | OpenAI | OpenAI | OpenAI | [6](#example-6-openai-realtime-speech-to-speech-stsasrllmtts) | Headless, OpenAI Realtime |
+| [docker-compose-ultravox.yml](./docker-compose-ultravox.yml) | Ultravox | Ultravox | Ultravox | [7](#example-7-ultravox-speech-to-speech-stsasrllmtts) | Headless, Ultravox Realtime |
 
 #### Example 1: Deepgram (ASR+TTS) + Anthropic (LLM)
 
@@ -164,7 +165,7 @@ docker-compose -f docker-compose-vosk.yml up -d
 DEEPGRAM_API_KEY=your_deepgram_key
 ```
 
-#### Example 6: OpenAI Realtime (ASR+LLM+TTS)
+#### Example 6: OpenAI Realtime Speech To Speech (STS=ASR+LLM+TTS)
 
 ```bash
 docker-compose -f docker-compose-openai-realtime.yml up -d
@@ -176,6 +177,19 @@ PORT=6030
 OPENAI_API_KEY=
 OPENAI_MODEL=gpt-4o-realtime-preview
 OPENAI_INSTRUCTIONS="You are a helpful assistant."
+```
+
+#### Example 7: Ultravox Speech To Speech (STS=ASR+LLM+TTS)
+
+```bash
+docker-compose -f docker-compose-ultravox.yml up -d
+```
+
+**Required .env parameters:**
+```
+PORT=6031
+ULTRAVOX_AGENT_ID=
+ULTRAVOX_API_KEY=
 ```
 
 ### Testing Your Setup
@@ -247,3 +261,21 @@ Launches all services, including the web application and database.
 ```bash
 docker-compose -f docker-compose-app.yml up -d
 ```
+
+## Support & Community
+
+*   **GitHub:** [https://github.com/agentvoiceresponse](https://github.com/agentvoiceresponse) - Report issues, contribute code.
+*   **Discord:** [https://discord.gg/DFTU69Hg74](https://discord.gg/DFTU69Hg74) - Join the community discussion.
+*   **Docker Hub:** [https://hub.docker.com/u/agentvoiceresponse](https://hub.docker.com/u/agentvoiceresponse) - Find Docker images.
+*   **NPM:** [https://www.npmjs.com/~agentvoiceresponse](https://www.npmjs.com/~agentvoiceresponse) - Browse our packages.
+*   **Wiki:** [https://wiki.agentvoiceresponse.com/en/home](https://wiki.agentvoiceresponse.com/en/home) - Project documentation and guides.
+
+## Support AVR
+
+AVR is free and open-source. If you find it valuable, consider supporting its development:
+
+<a href="https://ko-fi.com/agentvoiceresponse" target="_blank"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support us on Ko-fi"></a>
+
+## License
+
+MIT License - see the [LICENSE](LICENSE.md) file for details.
