@@ -14,6 +14,7 @@ docker-compose-*.yml
 !docker-compose-vosk.yml
 !docker-compose-openai-realtime.yml
 !docker-compose-ultravox.yml
+!docker-compose-deepgram.yml
 google.json
 tools
 model
