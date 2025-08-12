@@ -90,7 +90,7 @@ docker-compose -f docker-compose-anthropic.yml up -d
 ```
 
 **Required .env parameters:**
-```
+```env
 DEEPGRAM_API_KEY=your_deepgram_key
 
 ANTHROPIC_API_KEY=sk-ant-
@@ -107,7 +107,7 @@ docker-compose -f docker-compose-openai.yml up -d
 ```
 
 **Required .env parameters:**
-```
+```env
 DEEPGRAM_API_KEY=your_deepgram_key
 
 OPENAI_API_KEY=sk-proj-
@@ -122,7 +122,7 @@ docker-compose -f docker-compose-elevenlabs.yml up -d
 ```
 
 **Required .env parameters:**
-```
+```env
 ELEVENLABS_API_KEY="sk_"
 ELEVENLABS_MODEL_ID=scribe_v1
 ELEVENLABS_LANGUAGE_CODE=en
@@ -142,7 +142,7 @@ docker-compose -f docker-compose-google.yml up -d
 ```
 
 **Required .env parameters:**
-```
+```env
 GOOGLE_APPLICATION_CREDENTIALS="/google.json"
 SPEECH_RECOGNITION_LANGUAGE=en-US
 
@@ -162,7 +162,7 @@ docker-compose -f docker-compose-vosk.yml up -d
 ```
 
 **Required .env parameters:**
-```
+```env
 DEEPGRAM_API_KEY=your_deepgram_key
 ```
 
@@ -173,7 +173,7 @@ docker-compose -f docker-compose-openai-realtime.yml up -d
 ```
 
 **Required .env parameters:**
-```
+```env
 PORT=6030
 OPENAI_API_KEY=
 OPENAI_MODEL=gpt-4o-realtime-preview
@@ -187,7 +187,7 @@ docker-compose -f docker-compose-ultravox.yml up -d
 ```
 
 **Required .env parameters:**
-```
+```env
 PORT=6031
 ULTRAVOX_AGENT_ID=
 ULTRAVOX_API_KEY=
@@ -200,7 +200,7 @@ docker-compose -f docker-compose-deepgram.yml up -d
 ```
 
 **Required .env parameters:**
-```
+```env
 PORT=6033
 DEEPGRAM_API_KEY=
 AGENT_PROMPT=
@@ -209,12 +209,12 @@ AGENT_PROMPT=
 **Optional Variables:**
 
 ```env
-PORT: Server port (default: 6033)
-DEEPGRAM_SAMPLE_RATE: Audio sample rate (default: 8000)
-DEEPGRAM_ASR_MODEL: Speech recognition model (default: nova-3)
-DEEPGRAM_TTS_MODEL: Text-to-speech model (default: aura-2-thalia-en)
-DEEPGRAM_GREETING: Initial greeting message
-OPENAI_MODEL: OpenAI model for responses (default: gpt-4o-mini)
+PORT= Server port (default: 6033)
+DEEPGRAM_SAMPLE_RATE= Audio sample rate (default: 8000)
+DEEPGRAM_ASR_MODEL= Speech recognition model (default: nova-3)
+DEEPGRAM_TTS_MODEL= Text-to-speech model (default: aura-2-thalia-en)
+DEEPGRAM_GREETING= Initial greeting message
+OPENAI_MODEL= OpenAI model for responses (default: gpt-4o-mini)
 ```
 
 ### Testing Your Setup
@@ -246,7 +246,7 @@ Each docker-compose file includes the `avr-asterisk` service, but if you already
 
 The only thing you need to do is configure your extensions in your existing Asterisk installation. Here's an example configuration for your `extensions.conf`:
 
-```
+```env
 [demo]
 exten => 5001,1,Answer()
 exten => 5001,n,Ringing()
