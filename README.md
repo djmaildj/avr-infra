@@ -80,7 +80,8 @@ Make sure these URLs are correctly configured whether you're using local service
 | [docker-compose-google.yml](./docker-compose-google.yml) | Google | OpenRouter | Google | [4](#example-4-google-asrtts--openrouter-llm) | Headless, Google |
 | [docker-compose-vosk.yml](./docker-compose-vosk.yml) | Vosk | Anthropic | Deepgram | [5](#example-5-vosk-asr-open-source--anthropic-llm--deepgram-tts) | Headless, Vosk Open Source |
 | [docker-compose-openai-realtime.yml](./docker-compose-openai-realtime.yml) | OpenAI | OpenAI | OpenAI | [6](#example-6-openai-realtime-speech-to-speech-stsasrllmtts) | Headless, OpenAI Realtime |
-| [docker-compose-ultravox.yml](./docker-compose-ultravox.yml) | Ultravox | Ultravox | Ultravox | [7](#example-7-ultravox-speech-to-speech-stsasrllmtts) | Headless, Ultravox Realtime |
+| [docker-compose-ultravox.yml](./docker-compose-ultravox.yml) | Ultravox | Ultravox | Ultravox | [7](#example-7-ultravox-speech-to-speech) | Headless, Ultravox Realtime |
+| [docker-compose-deepgram.yml](./docker-compose-deepgram.yml) | Deepgram | Deepgram | Deepgram | [8](#example-8-deepgram-speech-to-speech) | Headless, Deepgram Realtime |
 
 #### Example 1: Deepgram (ASR+TTS) + Anthropic (LLM)
 
@@ -165,7 +166,7 @@ docker-compose -f docker-compose-vosk.yml up -d
 DEEPGRAM_API_KEY=your_deepgram_key
 ```
 
-#### Example 6: OpenAI Realtime Speech To Speech (STS=ASR+LLM+TTS)
+#### Example 6: OpenAI Realtime Speech To Speech
 
 ```bash
 docker-compose -f docker-compose-openai-realtime.yml up -d
@@ -179,7 +180,7 @@ OPENAI_MODEL=gpt-4o-realtime-preview
 OPENAI_INSTRUCTIONS="You are a helpful assistant."
 ```
 
-#### Example 7: Ultravox Speech To Speech (STS=ASR+LLM+TTS)
+#### Example 7: Ultravox Speech To Speech
 
 ```bash
 docker-compose -f docker-compose-ultravox.yml up -d
@@ -190,6 +191,30 @@ docker-compose -f docker-compose-ultravox.yml up -d
 PORT=6031
 ULTRAVOX_AGENT_ID=
 ULTRAVOX_API_KEY=
+```
+
+#### Example 8: Deepgram Speech To Speech
+
+```bash
+docker-compose -f docker-compose-deepgram.yml up -d
+```
+
+**Required .env parameters:**
+```
+PORT=6033
+DEEPGRAM_API_KEY=
+AGENT_PROMPT=
+```
+
+**Optional Variables:**
+
+```env
+PORT: Server port (default: 6033)
+DEEPGRAM_SAMPLE_RATE: Audio sample rate (default: 8000)
+DEEPGRAM_ASR_MODEL: Speech recognition model (default: nova-3)
+DEEPGRAM_TTS_MODEL: Text-to-speech model (default: aura-2-thalia-en)
+DEEPGRAM_GREETING: Initial greeting message
+OPENAI_MODEL: OpenAI model for responses (default: gpt-4o-mini)
 ```
 
 ### Testing Your Setup
