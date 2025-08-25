@@ -17,10 +17,13 @@ The infrastructure allows you to deploy the following services:
 
 This architecture allows you to customize and swap ASR, LLM, and TTS providers as needed.
 
-!!! note NEW: Speech To Speech in recent versions:
-      AVR now supports integration with OpenAI Realtime and Ultravox Speech-to-Speech. You can find an example configuration in the `docker-compose-openai-realtime.yml` or `docker-compose-ultravox.yml` file.
+> **🆕 NEW: Speech To Speech in recent versions**  
+> AVR now supports integration with OpenAI Realtime and Ultravox Speech-to-Speech. You can find an example configuration in the `docker-compose-openai-realtime.yml` or `docker-compose-ultravox.yml` file.
 
-> If the provider you want to integrate does not support ASR but only Speech-to-Text, we've implemented support for this as well. Simply add the `avr-asr-to-stt` container between `avr-core` and your STT container. You can find an example using ElevenLabs STT in the `docker-compose-elevenlabs.yml` file.
+> **💡 Note:** If the provider you want to integrate does not support ASR but only Speech-to-Text, we've implemented support for this as well. Simply add the `avr-asr-to-stt` container between `avr-core` and your STT container. You can find an example using ElevenLabs STT in the `docker-compose-elevenlabs.yml` file.
+
+> **🎵 NEW: Using Ambient Background Noise in AVR**  
+> AVR Core now supports the ability to add ambient background sounds to calls. This feature allows you to simulate real-world environments (e.g., office, café, nature) or introduce controlled background noise during testing. Find the complete documentation here: [Using Ambient Background Noise in AVR](https://wiki.agentvoiceresponse.com/en/using-ambient-background-noise-in-avr)
 
 ## Key Features
 
