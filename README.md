@@ -86,6 +86,7 @@ Make sure these URLs are correctly configured whether you're using local service
 | [docker-compose-openai-realtime.yml](./docker-compose-openai-realtime.yml) | OpenAI | OpenAI | OpenAI | [6](#example-6-openai-realtime-speech-to-speech-stsasrllmtts) | Headless, OpenAI Realtime |
 | [docker-compose-ultravox.yml](./docker-compose-ultravox.yml) | Ultravox | Ultravox | Ultravox | [7](#example-7-ultravox-speech-to-speech) | Headless, Ultravox Realtime |
 | [docker-compose-deepgram.yml](./docker-compose-deepgram.yml) | Deepgram | Deepgram | Deepgram | [8](#example-8-deepgram-speech-to-speech) | Headless, Deepgram Realtime |
+| [docker-compose-n8n.yml](./docker-compose-n8n.yml) | Deepgram | N8N | Deepgram | [9](#example-9-deepgram-asrtts--n8n-llm) | Headless, N8N LLM |
 
 #### Example 1: Deepgram (ASR+TTS) + Anthropic (LLM)
 
@@ -220,6 +221,34 @@ DEEPGRAM_TTS_MODEL= Text-to-speech model (default: aura-2-thalia-en)
 DEEPGRAM_GREETING= Initial greeting message
 OPENAI_MODEL= OpenAI model for responses (default: gpt-4o-mini)
 ```
+#### Example 9: Deepgram (ASR+TTS) + N8N (LLM)
+
+This configuration combines Deepgram's powerful speech recognition and text-to-speech capabilities with N8N's workflow automation for intelligent conversation handling.
+
+```bash
+docker-compose -f docker-compose-n8n.yml up -d
+```
+
+**Required .env parameters:**
+```env
+DEEPGRAM_API_KEY=your_deepgram_key
+# N8N Configuration
+PUBLIC_CHAT_URL=http://avr-n8n:5678/webhook/your_n8n_public_chat_id/chat
+```
+
+**🔧 Included Services:**
+- **N8N Container**: A locally installed N8N instance is included in the docker-compose-n8n.yml file
+- **Web Interface**: Access N8N at `http://localhost:5678` to create and manage your workflows
+- **Persistent Storage**: N8N data is persisted in a local volume for workflow preservation
+- **Webhook Endpoints**: Automatically configured webhook URLs for AVR integration
+
+**📚 More Details & Documentation:**
+
+For comprehensive guides on using AVR with N8N, including:
+- **Setup Tutorials**: Step-by-step configuration guides
+- **Workflow Examples**: Pre-built conversation flows
+
+Visit our detailed documentation: **[AVR + N8N Integration Guide](https://wiki.agentvoiceresponse.com/e/en/using-avr-with-n8n)**
 
 ### Testing Your Setup
 
