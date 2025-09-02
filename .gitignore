@@ -16,6 +16,7 @@ docker-compose-*.yml
 !docker-compose-ultravox.yml
 !docker-compose-deepgram.yml
 !docker-compose-n8n.yml
+!docker-compose-gemini.yml
 google.json
 tools
 model
