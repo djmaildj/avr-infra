@@ -87,6 +87,7 @@ Make sure these URLs are correctly configured whether you're using local service
 | [docker-compose-ultravox.yml](./docker-compose-ultravox.yml) | Ultravox | Ultravox | Ultravox | [7](#example-7-ultravox-speech-to-speech) | Headless, Ultravox Realtime |
 | [docker-compose-deepgram.yml](./docker-compose-deepgram.yml) | Deepgram | Deepgram | Deepgram | [8](#example-8-deepgram-speech-to-speech) | Headless, Deepgram Realtime |
 | [docker-compose-n8n.yml](./docker-compose-n8n.yml) | Deepgram | N8N | Deepgram | [9](#example-9-deepgram-asrtts--n8n-llm) | Headless, N8N LLM |
+| [docker-compose-gemini.yml](./docker-compose-gemini.yml) | Gemini | Gemini | Gemini | [10](#example-10-gemini-speech-to-speech) | Headless, Gemini Realtime |
 
 #### Example 1: Deepgram (ASR+TTS) + Anthropic (LLM)
 
@@ -248,7 +249,27 @@ For comprehensive guides on using AVR with N8N, including:
 - **Setup Tutorials**: Step-by-step configuration guides
 - **Workflow Examples**: Pre-built conversation flows
 
-Visit our detailed documentation: **[AVR + N8N Integration Guide](https://wiki.agentvoiceresponse.com/e/en/using-avr-with-n8n)**
+Visit our detailed documentation: **[AVR + N8N Integration Guide](https://wiki.agentvoiceresponse.com/en/using-avr-with-n8n)**
+
+#### Example 10: Gemini Speech To Speech
+
+```bash
+docker-compose -f docker-compose-gemini.yml up -d
+```
+
+**Required .env parameters:**
+```env
+GEMINI_API_KEY= API Key from Google AI Studio
+```
+
+**Optional Variables:**
+
+```env
+PORT= Server port (default: 6037)
+GEMINI_MODEL=  Gemini model ID to use (default: gemini-2.5-flash-preview-native-audio-dialog)
+GEMINI_INSTRUCTIONS= System prompt for the voice assistant (default. "You are a helpful assistant.")
+```
+Visit our detailed documentation: **[Gemini STS integration](https://wiki.agentvoiceresponse.com/en/using-gemini-sts-with-avr)**
 
 ### Testing Your Setup
 
