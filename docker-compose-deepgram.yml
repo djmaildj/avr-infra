@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       - PORT=5001 
-      - STS_URL=http://avr-sts-deepgram:6033/speech-to-speech-stream
+      - STS_URL=ws://avr-sts-deepgram:6033
     ports:
       - 5001:5001
     networks:
