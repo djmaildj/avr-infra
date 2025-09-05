@@ -6,72 +6,27 @@ services:
     restart: always
     environment:
       - PORT=5001 
-      - ASR_URL=http://avr-asr-to-stt:6019/speech-to-text-stream
-      - LLM_URL=http://avr-llm-anthropic:6014/prompt-stream
-      - TTS_URL=http://avr-tts-elevenlabs:6021/text-to-speech-stream
-      - INTERRUPT_LISTENING=true
-      - SYSTEM_MESSAGE="Hello, I'm an anthropic helpful assistant. How can I help you today?"
+      - STS_URL=ws://avr-sts-elevenlabs:6035
     ports:
       - 5001:5001
     networks:
       - avr
 
-  avr-asr-to-stt:
-    image: agentvoiceresponse/avr-asr-to-stt
+  avr-sts-elevenlabs:
+    image: agentvoiceresponse/avr-sts-elevenlabs
     platform: linux/x86_64
-    container_name: avr-asr-to-stt
+    container_name: avr-sts-elevenlabs
     restart: always
     environment:
-      - PORT=6019
-      - STT_URL=http://avr-stt-elevenlabs:6022/transcribe
+      - PORT=6035
+      - ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY
+      - ELEVENLABS_AGENT_ID=$ELEVENLABS_AGENT_ID
     networks:
       - avr
 
-  avr-stt-elevenlabs:
-    image: agentvoiceresponse/avr-stt-elevenlabs
-    platform: linux/x86_64
-    container_name: avr-stt-elevenlabs
-    restart: always
-    environment:
-      - PORT=6022
-      - ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY
-      - ELEVENLABS_MODEL_ID=${ELEVENLABS_MODEL_ID:-scribe_v1}
-      - ELEVENLABS_LANGUAGE_CODE=${ELEVENLABS_LANGUAGE_CODE:-en}
-    volumes:
-      - ./temp:/usr/src/app/temp_audio
-    networks:
-      - avr
-  avr-tts-elevenlabs:
-    image: agentvoiceresponse/avr-tts-elevenlabs
-    platform: linux/x86_64
-    container_name: avr-tts-elevenlabs
-    restart: always
-    environment:
-      - PORT=6021
-      - ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY
-      - ELEVENLABS_VOICE_ID=$ELEVENLABS_VOICE_ID
-    networks:
-      - avr
-
-  avr-llm-anthropic:
-    image: agentvoiceresponse/avr-llm-anthropic
-    platform: linux/x86_64
-    container_name: avr-llm-anthropic
-    restart: always
-    environment:
-      - PORT=6014
-      - ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY
-      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-3-5-sonnet-20240620}
-      - ANTHROPIC_MAX_TOKENS=${ANTHROPIC_MAX_TOKENS:-1024}
-      - ANTHROPIC_TEMPERATURE=${ANTHROPIC_TEMPERATURE:-1}
-      - ANTHROPIC_SYSTEM_PROMPT=${ANTHROPIC_SYSTEM_PROMPT:-You are a helpful assistant.}
-    volumes:
-      - ./tools:/usr/src/app/tools
-    networks:
-      - avr
-  
   avr-asterisk:
     image: agentvoiceresponse/avr-asterisk
+    platform: linux/x86_64
     container_name: avr-asterisk
     restart: always
     ports:

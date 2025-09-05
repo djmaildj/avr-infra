@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       - PORT=5001 
-      - STS_URL=http://avr-sts-ultravox:6031/speech-to-speech-stream
+      - STS_URL=ws://avr-sts-ultravox:6031
     ports:
       - 5001:5001
     networks:

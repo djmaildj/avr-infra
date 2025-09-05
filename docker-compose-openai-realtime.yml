@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       - PORT=5001 
-      - STS_URL=http://avr-sts-openai:6030/speech-to-speech-stream
+      - STS_URL=ws://avr-sts-openai:6030
     ports:
       - 5001:5001
     networks:
@@ -22,11 +22,15 @@ services:
       - OPENAI_API_KEY=$OPENAI_API_KEY
       - OPENAI_MODEL=gpt-4o-realtime-preview
       - OPENAI_INSTRUCTIONS="You are a helpful assistant."
+      - AMI_URL=${AMI_URL:-http://avr-ami:6006}
+    # volumes: # uncomment if you want to use the custom tools
+    #   - ./tools:/usr/src/app/tools
     networks:
       - avr
 
   avr-asterisk:
     image: agentvoiceresponse/avr-asterisk
+    platform: linux/x86_64
     container_name: avr-asterisk
     restart: always
     ports:

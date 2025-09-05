@@ -54,18 +54,17 @@ If you don't need the web interface, you can use one of the example docker-compo
 
 The most critical configuration is setting up the correct URLs for your services in the `.env` file:
 
-- `ASR_URL`: The URL where your ASR service is running (e.g., `http://avr-asr-[provider_name]:[port]}`)
-- `LLM_URL`: The URL where your LLM service is running (e.g., `http://avr-llm-[provider_name]:[port]`)
-- `TTS_URL`: The URL where your TTS service is running (e.g., `http://avr-tts-[provider_name]:[port]`)
+- `ASR_URL`: The URL where your ASR service is running (e.g., `http://avr-asr-[provider_name]:[port]}/speech-to-text-stream`)
+- `LLM_URL`: The URL where your LLM service is running (e.g., `http://avr-llm-[provider_name]:[port]/prompt-stream`)
+- `TTS_URL`: The URL where your TTS service is running (e.g., `http://avr-tts-[provider_name]:[port]/text-to-speech-stream`)
 
 If you are using STS (Speech-to-Speech) instead of separate ASR, LLM and TTS services, you only need to configure:
-- `STS_URL`: The URL where your STS service is running (e.g., `http://avr-sts-[provider_name]:[port]`)
+- `STS_URL`: The URL where your STS service is running (e.g., `ws://avr-sts-[provider_name]:[port]`)
 You can find an example configuration using OpenAI Realtime in the `docker-compose-openai-realtime.yml` file.
 
 If your provider doesn't support ASR but only STT (Speech-to-Text), you'll need to use the `avr-asr-to-stt` container which handles VAD (Voice Activity Detection) and audio packet composition for your STT service. In this case:
 - Set `ASR_URL` to `http://avr-asr-to-stt:[port]`
 - Configure your `STT_URL` in the environment variables of the `avr-asr-to-stt` container
-You can find an example configuration using ElevenLabs in the `docker-compose-elevenlabs.yml` file.
 
 These URLs are used by AVR Core to forward:
 - Audio chunks to your ASR service
@@ -80,7 +79,7 @@ Make sure these URLs are correctly configured whether you're using local service
 |------|-----|-----|-----|---------|----------------|
 | [docker-compose-anthropic.yml](./docker-compose-anthropic.yml) | Deepgram | Anthropic | Deepgram | [1](#example-1-deepgram-asrtts--anthropic-llm) | Headless, Anthropic LLM |
 | [docker-compose-openai.yml](./docker-compose-openai.yml) | Deepgram | OpenAI | Deepgram | [2](#example-2-deepgram-asrtts--openai-llm) | Headless, OpenAI LLM |
-| [docker-compose-elevenlabs.yml](./docker-compose-elevenlabs.yml) | ElevenLabs | OpenAI | ElevenLabs | [3](#example-3-elevenlabs-stttts--avr-asr-to-stt--anthropic-llm) | Headless, ElevenLabs |
+| [docker-compose-elevenlabs.yml](./docker-compose-elevenlabs.yml) | ElevenLabs | ElevenLabs | ElevenLabs | [3](#example-3-elevenlabs-speech-to-speech) | Headless, ElevenLabs |
 | [docker-compose-google.yml](./docker-compose-google.yml) | Google | OpenRouter | Google | [4](#example-4-google-asrtts--openrouter-llm) | Headless, Google |
 | [docker-compose-vosk.yml](./docker-compose-vosk.yml) | Vosk | Anthropic | Deepgram | [5](#example-5-vosk-asr-open-source--anthropic-llm--deepgram-tts) | Headless, Vosk Open Source |
 | [docker-compose-openai-realtime.yml](./docker-compose-openai-realtime.yml) | OpenAI | OpenAI | OpenAI | [6](#example-6-openai-realtime-speech-to-speech-stsasrllmtts) | Headless, OpenAI Realtime |
@@ -121,7 +120,7 @@ OPENAI_MODEL=gpt-3.5-turbo
 OPENAI_MAX_TOKENS=100
 OPENAI_TEMPERATURE=0.0
 ```
-#### Example 3: ElevenLabs (STT+TTS) + AVR-ASR-TO-STT + Anthropic (LLM)
+#### Example 3: ElevenLabs Speech To Speech
 
 ```bash
 docker-compose -f docker-compose-elevenlabs.yml up -d
@@ -130,15 +129,7 @@ docker-compose -f docker-compose-elevenlabs.yml up -d
 **Required .env parameters:**
 ```env
 ELEVENLABS_API_KEY="sk_"
-ELEVENLABS_MODEL_ID=scribe_v1
-ELEVENLABS_LANGUAGE_CODE=en
-ELEVENLABS_VOICE_ID=Xb7hH8MSUJpSbSDYk0k2
-
-ANTHROPIC_API_KEY=sk-ant-
-ANTHROPIC_MODEL=claude-3-haiku-20240307
-ANTHROPIC_MAX_TOKENS=1024
-ANTHROPIC_TEMPERATURE=1
-ANTHROPIC_SYSTEM_PROMPT="You are a helpful assistant."
+ELEVENLABS_AGENT_ID=
 ```
 
 #### Example 4: Google (ASR+TTS) + OpenRouter (LLM)
