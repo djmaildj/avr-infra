@@ -58,12 +58,14 @@ services:
   
   avr-asterisk:
     image: agentvoiceresponse/avr-asterisk
+    platform: linux/x86_64
     container_name: avr-asterisk
     restart: always
     ports:
       - 5038:5038
       - 5060:5060
       - 8088:8088
+      - 8089:8089
       - 10000-10050:10000-10050/udp
     volumes:
       - ./asterisk/conf/manager.conf:/etc/asterisk/my_manager.conf

@@ -2,6 +2,7 @@ dashboard
 db
 mysql
 ollama
+ollama-web
 traefik
 .env
 .keys
@@ -17,7 +18,9 @@ docker-compose-*.yml
 !docker-compose-deepgram.yml
 !docker-compose-n8n.yml
 !docker-compose-gemini.yml
+!docker-compose-local.yml
 google.json
 tools
 model
 n8n
+data/*
