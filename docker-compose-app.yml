@@ -1,71 +1,44 @@
 services:
 
-  avr-app:
-    image: agentvoiceresponse/avr-app
+  avr-app-backend:
+    image: agentvoiceresponse/avr-app-backend
     platform: linux/x86_64
-    container_name: avr-app
+    container_name: avr-app-backend
     restart: always
+    ports:
+      - "3001:3001"
     environment:
-      - PORT=3000
-      - ADMIN_EMAIL=${ADMIN_EMAIL}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - DATABASE_HOST=avr-app-db
-      - DATABASE_PORT=3306
-      - DATABASE_NAME=${DATABASE_NAME:-avr}
-      - DATABASE_USERNAME=${DATABASE_USERNAME:-avr}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - AMI_URL=${AMI_URL:-http://avr-ami:9000}
-      - ARI_URL=${ARI_URL:-http://avr-asterisk:8088/ari}
-      - ARI_USERNAME=${ARI_USERNAME:-avr}
-      - ARI_PASSWORD=${ARI_PASSWORD:-avr}
+      - PORT=3001
+      - JWT_SECRET=your-jwt-secret-here
+      - CORE_DEFAULT_IMAGE=agentvoiceresponse/avr-core
+      - DB_TYPE=sqlite
+      - DB_DATABASE=/app/data/data.db
+      - FRONTEND_URL=http://localhost:3000
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=$ADMIN_PASSWORD
+      - WEBHOOK_URL=http://avr-app-backend:3001/webhooks
+      - WEBHOOK_SECRET=your-webhook-secret-here
+      - ASTERISK_CONFIG_PATH=/app/asterisk
+      - ARI_URL=$ARI_URL
+      - ARI_USERNAME=$ARI_USERNAME
+      - ARI_PASSWORD=$ARI_PASSWORD
     volumes:
+      - ./asterisk/conf:/app/asterisk
+      - ./data:/app/data
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./asterisk:/usr/src/app/asterisk 
-      - ./keys:/usr/src/app/keys
-      - ./functions:/usr/src/app/functions
-    ports:
-      - 3000:3000
-    depends_on:
-      avr-app-db:
-        condition: service_healthy
-      avr-asterisk:
-        condition: service_started
     networks:
       - avr
 
-  avr-app-db:
-    image: mysql:8.0.15
+  avr-app-frontend:
+    image: agentvoiceresponse/avr-app-frontend
     platform: linux/x86_64
-    container_name: avr-app-db
-    command: mysqld --default-authentication-plugin=mysql_native_password
+    container_name: avr-app-frontend
     restart: always
-    environment:
-      - MYSQL_DATABASE=${DATABASE_NAME:-avr}
-      - MYSQL_USER=${DATABASE_USERNAME:-avr}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
     ports:
-      - 3309:3306
-    volumes:
-      - ./db:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 20s
-      retries: 10
-    networks:
-      - avr
-
-  avr-ami:
-    image: agentvoiceresponse/avr-ami
-    platform: linux/x86_64
-    container_name: avr-ami
-    restart: always
+      - "3000:3000"
     environment:
-      - PORT=${AMI_PORT:-9000}
-      - AMI_HOST=${AMI_HOST:-avr-asterisk}
-      - AMI_PORT=${AMI_PORT:-5038}
-      - AMI_USERNAME=${AMI_USERNAME:-avr}
-      - AMI_PASSWORD=${AMI_PASSWORD:-avr}
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - NEXT_PUBLIC_WEBRTC_CLIENT_URL=http://localhost:8080/index.html
     networks:
       - avr
 
@@ -75,15 +48,24 @@ services:
     container_name: avr-asterisk
     restart: always
     ports:
-      - 5060:5060
+      - 8089:8089
       - 10000-10050:10000-10050/udp
-      - 8088:8088
     volumes:
       - ./asterisk/conf/manager.conf:/etc/asterisk/my_manager.conf
       - ./asterisk/conf/pjsip.conf:/etc/asterisk/my_pjsip.conf
       - ./asterisk/conf/extensions.conf:/etc/asterisk/my_extensions.conf
       - ./asterisk/conf/queues.conf:/etc/asterisk/my_queues.conf
       - ./asterisk/conf/ari.conf:/etc/asterisk/my_ari.conf
+    networks:
+      - avr
+  
+  avr-phone:
+    image: agentvoiceresponse/avr-phone
+    platform: linux/x86_64
+    container_name: avr-phone
+    restart: always
+    ports:
+      - 8080:80
     networks:
       - avr
 

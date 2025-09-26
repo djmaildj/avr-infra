@@ -53,19 +53,21 @@ services:
       - ANTHROPIC_TEMPERATURE=${ANTHROPIC_TEMPERATURE:-1}
       - ANTHROPIC_SYSTEM_PROMPT=${ANTHROPIC_SYSTEM_PROMPT:-You are a helpful assistant.}
       - AMI_URL=${AMI_URL:-http://avr-ami:6006}
-    volumes:
-      - ./tools/get_availability.js:/usr/src/app/tools/get_availability.js
+    # volumes: # uncomment if you want to use the custom tools
+    #   - ./tools:/usr/src/app/tools
     networks:
       - avr
   
   avr-asterisk:
     image: agentvoiceresponse/avr-asterisk
+    platform: linux/x86_64
     container_name: avr-asterisk
     restart: always
     ports:
       - 5038:5038
       - 5060:5060
       - 8088:8088
+      - 8089:8089
       - 10000-10050:10000-10050/udp
     volumes:
       - ./asterisk/conf/manager.conf:/etc/asterisk/my_manager.conf
