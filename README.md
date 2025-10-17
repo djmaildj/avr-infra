@@ -86,7 +86,8 @@ Make sure these URLs are correctly configured whether you're using local service
 | [docker-compose-ultravox.yml](./docker-compose-ultravox.yml) | Ultravox | Ultravox | Ultravox | [7](#example-7-ultravox-speech-to-speech) | Headless, Ultravox Realtime |
 | [docker-compose-deepgram.yml](./docker-compose-deepgram.yml) | Deepgram | Deepgram | Deepgram | [8](#example-8-deepgram-speech-to-speech) | Headless, Deepgram Realtime |
 | [docker-compose-n8n.yml](./docker-compose-n8n.yml) | Deepgram | N8N | Deepgram | [9](#example-9-deepgram-asrtts--n8n-llm) | Headless, N8N LLM |
-| [docker-compose-gemini.yml](./docker-compose-gemini.yml) | Gemini | Gemini | Gemini | [10](#example-10-gemini-speech-to-speech) | Headless, Gemini Realtime |
+| [docker-compose-hypercheap.yml](./docker-compose-hypercheap.yml) | Fennec | Baseten | Inworld | [10](#example-10-hypercheap-fennec--baseten--inworld) | Headless, Cost-effective stack |
+| [docker-compose-gemini.yml](./docker-compose-gemini.yml) | Gemini | Gemini | Gemini | [11](#example-11-gemini-speech-to-speech) | Headless, Gemini Realtime |
 
 #### Example 1: Deepgram (ASR+TTS) + Anthropic (LLM)
 
@@ -242,7 +243,22 @@ For comprehensive guides on using AVR with N8N, including:
 
 Visit our detailed documentation: **[AVR + N8N Integration Guide](https://wiki.agentvoiceresponse.com/en/using-avr-with-n8n)**
 
-#### Example 10: Gemini Speech To Speech
+#### Example 10: HyperCheap (Fennec + Baseten + Inworld)
+
+This configuration uses a cost-effective stack featuring Fennec for ASR, Baseten for LLM, and Inworld for TTS.
+
+```bash
+docker-compose -f docker-compose-hypercheap.yml up -d
+```
+
+**Required .env parameters:**
+```env
+FENNEC_API_KEY=your_fennec_api_key
+BASETEN_API_KEY=your_baseten_api_key
+INWORLD_API_KEY=your_inworld_api_key
+```
+
+#### Example 11: Gemini Speech To Speech
 
 ```bash
 docker-compose -f docker-compose-gemini.yml up -d
